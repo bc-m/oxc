@@ -261,7 +261,7 @@ impl<'a> ClassProperties<'a, '_> {
             #[expect(clippy::match_same_arms)]
             match element {
                 ClassElement::PropertyDefinition(prop) => {
-                    if !prop.r#static {
+                    if !prop.r#static && !prop.declare {
                         self.convert_instance_property(prop, &mut instance_inits, ctx);
                     }
                 }
@@ -766,6 +766,11 @@ impl<'a> ClassProperties<'a, '_> {
         class.body.body.retain_mut(|element| {
             match element {
                 ClassElement::PropertyDefinition(prop) => {
+                    if prop.declare {
+                        // Remove `declare` properties
+                        return false;
+                    }
+
                     if prop.r#static {
                         self.convert_static_property(prop, ctx);
                     } else if prop.computed {

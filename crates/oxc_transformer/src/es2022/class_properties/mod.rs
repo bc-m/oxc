@@ -404,7 +404,7 @@ impl<'a> Traverse<'a, TransformState<'a>> for ClassProperties<'a, '_> {
         prop: &mut PropertyDefinition<'a>,
         _ctx: &mut TraverseCtx<'a>,
     ) {
-        if prop.r#static {
+        if prop.r#static && !prop.declare {
             self.flag_entering_static_property_or_block();
         }
     }
@@ -414,7 +414,7 @@ impl<'a> Traverse<'a, TransformState<'a>> for ClassProperties<'a, '_> {
         prop: &mut PropertyDefinition<'a>,
         _ctx: &mut TraverseCtx<'a>,
     ) {
-        if prop.r#static {
+        if prop.r#static && !prop.declare {
             self.flag_exiting_static_property_or_block();
         }
     }
